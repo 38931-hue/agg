@@ -13,24 +13,10 @@ if (!cached) {
 }
 
 export async function connectDB() {
-  let uri = process.env.MONGODB_URI;
+  const uri = process.env.MONGODB_URI;
 
   if (!uri) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn('⚠️ MONGODB_URI não definida. Iniciando instância de MongoDB em memória para desenvolvimento local...');
-      try {
-        const { MongoMemoryServer } = await import('mongodb-memory-server');
-        if (!global.__mongodInstance) {
-          global.__mongodInstance = await MongoMemoryServer.create();
-        }
-        uri = global.__mongodInstance.getUri();
-        process.env.MONGODB_URI = uri;
-      } catch (e) {
-        throw new Error('A variável de ambiente MONGODB_URI não foi definida e não foi possível iniciar o banco em memória.');
-      }
-    } else {
-      throw new Error('A variável de ambiente MONGODB_URI não foi definida.');
-    }
+    throw new Error('A variável de ambiente MONGODB_URI não foi definida.');
   }
 
   if (cached.conn) {
